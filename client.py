@@ -74,14 +74,13 @@ def on_connect(mqttc, obj, flags, rc):
 
 serReset=1
 def on_message(mqttc, obj, msg):
+    global serReset
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
     msg_topic=msg.topic
     if (msg.payload.decode()=='1'):
-        SetMonitorModePLC()
         serReset=1
         print("message payload gan with serReset "+serReset)
     else :
-        SetRunModePLC()
         serReset=0
 
 def on_publish(mqttc, obj, mid):
@@ -154,6 +153,9 @@ while run:
         mqttc.publish("ev-second",{"data": {"s1":"3","s2":"2","s3":"0","s4":"0","s5":"0","s6":"0","s7":"0","s8":"0","s9":"0","s10":"0","s11":"0","s12":"0","s13":"0","s14":"0","s15":"0","s16":"0","s17":"3","s18":"0","s19":"1","s20":"0","s21":"0","s22":"0","s23":"0","s24":"0","s25":"0","s26":"0","s27":"0","s28":"0","ts":"1550552662552"},0)
         time.sleep(1)
         mqttc.loop()
+        if (serReset==1):
+            SetMonitorModePLC()
+        else: SetRunModePLC()
     except KeyboardInterrupt:
         print ("Connection is closed!")
         break
