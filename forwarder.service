@@ -1,0 +1,16 @@
+[Unit]
+Description=Forwarder Service
+#After=network.target
+After=multi-user.target
+
+[Service]
+Type=simple
+# Another Type option: forking
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/forwarder/forwarder-v1.py
+Restart=always
+StandarInput=tty-force
+# Other Restart options: or always, on-abort, etc
+
+[Install]
+WantedBy=multi-user.target
